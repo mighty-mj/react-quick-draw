@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/react-quick-draw/static/css/main.5f361e03.chunk.css",
+    "main.js": "/react-quick-draw/static/js/main.40b0325e.chunk.js",
+    "main.js.map": "/react-quick-draw/static/js/main.40b0325e.chunk.js.map",
+    "runtime-main.js": "/react-quick-draw/static/js/runtime-main.014e8426.js",
+    "runtime-main.js.map": "/react-quick-draw/static/js/runtime-main.014e8426.js.map",
+    "static/js/2.d02532ca.chunk.js": "/react-quick-draw/static/js/2.d02532ca.chunk.js",
+    "static/js/2.d02532ca.chunk.js.map": "/react-quick-draw/static/js/2.d02532ca.chunk.js.map",
+    "index.html": "/react-quick-draw/index.html",
+    "precache-manifest.ec2facf64e744c229516f34875febd87.js": "/react-quick-draw/precache-manifest.ec2facf64e744c229516f34875febd87.js",
+    "service-worker.js": "/react-quick-draw/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/react-quick-draw/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.d02532ca.chunk.js.LICENSE.txt": "/react-quick-draw/static/js/2.d02532ca.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/react-quick-draw/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.014e8426.js",
+    "static/js/2.d02532ca.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.40b0325e.chunk.js"
+  ]
+}
