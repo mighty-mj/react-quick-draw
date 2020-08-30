@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { getPrediction } from "./helpers.js";
+import {RoundContext} from "./Round";
 
-function Controls({ theCanvas, model, labels }) {
+function Controls({ theCanvas, model, labels}) {
   let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
+  let {nextRound} = useContext(RoundContext)
 
   useEffect(() => {
     console.log(prediction);
@@ -20,10 +22,13 @@ function Controls({ theCanvas, model, labels }) {
         Clear the canvas.
       </button>
       <button
-        onClick={() =>
+        onClick={() => {
           getPrediction(theCanvas, model).then(prediction =>
-            setPrediction(labels[prediction[0]])
-          )
+              setPrediction(labels[prediction[0]])
+          );
+          nextRound();
+        }
+
         }
       >
         Predict the drawing.

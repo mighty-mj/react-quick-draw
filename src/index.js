@@ -1,21 +1,33 @@
-import React from "react";
+import React, {useContext} from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import {Canvas, Controls} from "./App";
 import * as serviceWorker from "./serviceWorker";
 import * as tf from "@tensorflow/tfjs";
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
+import {useRounds, RoundContext} from "./Round";
 
 const model = tf.loadModel("./model/model.json");
 const labels = require("./labels.json");
 let ref = React.createRef();
 
 function Game() {
+    const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
     return (
         <div>
-            <Canvas ref={ref}/>
-            <Controls theCanvas={ref} model={model} labels={labels}/>
-            <Link to="/"><button>Home</button></Link>
+            <RoundContext.Provider value={{rounds, currentRound, nextRound, resetRounds}}>
+                <RoundSummary/>
+                <Canvas ref={ref}/>
+                <Controls theCanvas={ref} model={model} labels={labels}/>
+                {rounds[currentRound]}
+                <br />
+                <button onClick={() => resetRounds()}>Reset game, loose all your achievements...</button>
+                <br />
+                <Link to="/">
+                    <button onClick={() => resetRounds()}>Home</button>
+                </Link>
+            </RoundContext.Provider>
+
         </div>
     )
 }
@@ -24,11 +36,22 @@ function StartScreen() {
     return (
         <div>
             <h2>Sketch!</h2>
-            This game has been modeld-off Google's "Quick, Draw!" game, and uses a sampling from the "Quick, Draw!"
-            dataset.<br />
+            This game has been modeled-off Google's "Quick, Draw!" game, and uses a sampling from the "Quick, Draw!"
+            dataset.<br/>
             Brought to you by the EPFL Extension School.
-            <br />
-            <Link to="/game"><button>Game Screen</button></Link>
+            <br/>
+            <Link to="/game">
+                <button>Game Screen</button>
+            </Link>
+        </div>
+    )
+}
+
+function RoundSummary() {
+    const {currentRound, rounds} = useContext(RoundContext);
+    return (
+        <div>
+            <h2>Sketch! - Round {currentRound+1} of {rounds.length}</h2>
         </div>
     )
 }
