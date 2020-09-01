@@ -11,9 +11,12 @@ const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
 const labels = require("./labels.json");
 let ref = React.createRef();
 
-function Game() {
+export const GameContext = React.createContext({});
+
+function GamePlay() {
     const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
-    return (
+
+    const game = (
         <div>
             <RoundContext.Provider value={{rounds, currentRound, nextRound, resetRounds}}>
                 <RoundSummary/>
@@ -21,14 +24,27 @@ function Game() {
                 <Controls theCanvas={ref} model={model} labels={labels}/>
                 {rounds[currentRound]}
                 <br/>
-                <button onClick={() => resetRounds()}>Reset game, loose all your achievements...</button>
-                <br/>
                 <Link to="/">
                     <button onClick={() => resetRounds()}>Home</button>
                 </Link>
             </RoundContext.Provider>
-
         </div>
+    );
+
+    const result = (
+        <div>
+            <h2>You scored XX points!</h2>
+            <br/>
+            Want to challenge your drawing skills again? <button onClick={() => {
+            resetRounds();
+        }}>Try Again!</button>
+        </div>
+    );
+
+    return (
+        <GameContext.Provider value={{labels, currentRound }}>
+            {currentRound > 9 ? result : game}
+        </GameContext.Provider>
     )
 }
 
@@ -61,7 +77,7 @@ function GameRouting() {
         <Router>
             <Switch>
                 <Route path="/game">
-                    <Game/>
+                    <GamePlay/>
                 </Route>
                 <Route path="/">
                     <StartScreen/>
