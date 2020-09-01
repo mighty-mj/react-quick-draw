@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 
 const RoundContext = React.createContext({});
 
@@ -8,11 +8,10 @@ function useRounds(labels) {
     const rounds = Array.apply(null, {length: labels.length})
         .map((round, index) => <Round whatToDraw={labels[index]}/>);
 
-    return [rounds, currentRound, () => setCurrentRound((currentRound+1)%labels.length), () => setCurrentRound(0)];
+    return [rounds, currentRound, () => setCurrentRound((currentRound + 1) % labels.length), () => setCurrentRound(0)];
 }
 
 function Round({whatToDraw}) {
-
     return (
         <div>
             <RoundContext.Provider value={{whatToDraw}}>
@@ -24,9 +23,21 @@ function Round({whatToDraw}) {
 
 function Question() {
     const {whatToDraw} = useContext(RoundContext);
+    const [seconds, setSeconds] = useState(20);
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (seconds === 0) {
+                clearTimeout();
+            } else {
+                setSeconds(seconds - 1);
+            }
+        }, 1000);
+    });
+
     return (
         <div>
-            You have 20 seconds to draw a {whatToDraw}!
+            {seconds > 0 ? <div>You have {seconds} seconds to draw a {whatToDraw}!</div> : <div>Time's up!</div>}
         </div>
     )
 }
