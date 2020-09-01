@@ -1,96 +1,106 @@
 import React, {useContext, useEffect, useState} from "react";
-import { getPrediction } from "./helpers.js";
+import {getPrediction} from "./helpers.js";
 import {RoundContext} from "./Round";
+import {GameContext} from "./index";
 
-function Controls({ theCanvas, model, labels}) {
-  let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
-  let {nextRound} = useContext(RoundContext)
+function Controls({theCanvas, model, labels}) {
+    let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
+    let {currentRound, nextRound} = useContext(RoundContext);
+    let {points, dispatch} = useContext(GameContext);
 
-  useEffect(() => {
-    console.log(prediction);
-  });
+    useEffect(() => {
+        console.log(prediction);
+    });
 
-  return (
-    <div>
-      <button
-        onClick={() => {
-          const canvas = theCanvas.current;
-          const ctx = canvas.getContext("2d");
-          ctx.fillRect(0, 0, canvas.height, canvas.width);
-        }}
-      >
-        Clear the canvas.
-      </button>
-      <button
-        onClick={() => {
-          getPrediction(theCanvas, model).then(prediction =>
-              setPrediction(labels[prediction[0]])
-          );
-          nextRound();
-        }
+    return (
+        <div>
+            <button
+                onClick={() => {
+                    const canvas = theCanvas.current;
+                    const ctx = canvas.getContext("2d");
+                    ctx.fillRect(0, 0, canvas.height, canvas.width);
+                }}
+            >
+                Clear the canvas.
+            </button>
+            <button
+                onClick={() => {
+                    getPrediction(theCanvas, model).then(prediction => {
+                            setPrediction(labels[prediction[0]]);
+                            evaluateRound(labels[prediction[0]], labels[currentRound], dispatch);
+                        }
+                    );
+                    console.log(points);
+                    nextRound();
+                    }
+                }
+            >
+                Predict the drawing.
+            </button>
+        </div>
+    );
+}
 
-        }
-      >
-        Predict the drawing.
-      </button>
-    </div>
-  );
+function evaluateRound(prediction, whatToDraw, dispatch) {
+    if (prediction === whatToDraw) {
+        dispatch({type: "addOne"});
+    }
 }
 
 const Canvas = React.forwardRef((props, ref) => {
-  let mouseDown = false;
-  let lastX;
-  let lastY;
+    let mouseDown = false;
+    let lastX;
+    let lastY;
 
-  function drawLine(canvas, x, y, lastX, lastY) {
-    let context = canvas.getContext("2d");
+    function drawLine(canvas, x, y, lastX, lastY) {
+        let context = canvas.getContext("2d");
 
-    context.strokeStyle = "#000000";
-    context.lineWidth = 12;
-    context.lineJoin = "round";
+        context.strokeStyle = "#000000";
+        context.lineWidth = 12;
+        context.lineJoin = "round";
 
-    context.beginPath();
-    context.moveTo(lastX, lastY);
-    context.lineTo(x, y);
-    context.closePath();
-    context.stroke();
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(x, y);
+        context.closePath();
+        context.stroke();
 
-    return [x, y];
-  }
-
-  const handleMouseup = () => {
-    mouseDown = false;
-    [lastX, lastY] = [undefined, undefined];
-  };
-
-  const handleMousemove = e => {
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    if (mouseDown) {
-      [lastX, lastY] = drawLine(e.target, x, y, lastX, lastY);
+        return [x, y];
     }
-  };
 
-  useEffect(() => {
-    const canvas = ref.current;
-    const context = canvas.getContext("2d");
+    const handleMouseup = () => {
+        mouseDown = false;
+        [lastX, lastY] = [undefined, undefined];
+    };
 
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, canvas.height, canvas.width);
-  });
+    const handleMousemove = e => {
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-  return (
-    <canvas
-      height={300}
-      width={300}
-      ref={ref}
-      onMouseDown={() => (mouseDown = true)}
-      onMouseUp={handleMouseup}
-      onMouseMove={e => handleMousemove(e)}
-    />
-  );
+        if (mouseDown) {
+            [lastX, lastY] = drawLine(e.target, x, y, lastX, lastY);
+        }
+    };
+
+    useEffect(() => {
+        const canvas = ref.current;
+        const context = canvas.getContext("2d");
+
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, canvas.height, canvas.width);
+    });
+
+    return (
+        <canvas
+            height={300}
+            width={300}
+            ref={ref}
+            onMouseDown={() => (mouseDown = true)}
+            onMouseUp={handleMouseup}
+            onMouseMove={e => handleMousemove(e)}
+        />
+    );
 });
 
-export { Canvas, Controls };
+export {Canvas, Controls};

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useReducer} from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import {Canvas, Controls} from "./App";
@@ -6,6 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 import * as tf from "@tensorflow/tfjs";
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import {useRounds, RoundContext} from "./Round";
+import {pointReducer} from "./Points";
 
 const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
 const labels = require("./labels.json");
@@ -15,6 +16,7 @@ export const GameContext = React.createContext({});
 
 function GamePlay() {
     const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
+    const [points, dispatch] = useReducer(pointReducer, 0);
 
     const game = (
         <div>
@@ -33,16 +35,17 @@ function GamePlay() {
 
     const result = (
         <div>
-            <h2>You scored XX points!</h2>
+            <h2>You scored {points} points!</h2>
             <br/>
             Want to challenge your drawing skills again? <button onClick={() => {
             resetRounds();
+            dispatch({type: "reset"});
         }}>Try Again!</button>
         </div>
     );
 
     return (
-        <GameContext.Provider value={{labels, currentRound }}>
+        <GameContext.Provider value={{points, labels, currentRound, dispatch }}>
             {currentRound > 9 ? result : game}
         </GameContext.Provider>
     )
