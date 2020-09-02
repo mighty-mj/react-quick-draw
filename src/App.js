@@ -3,10 +3,10 @@ import {getPrediction} from "./helpers.js";
 import {RoundContext} from "./Round";
 import {GameContext} from "./index";
 
-function Controls({theCanvas, model, labels}) {
+const Controls = React.forwardRef(() => {
+    const {ref, model, labels, currentRound, nextRound} = useContext(RoundContext);
+    const {points, dispatch} = useContext(GameContext);
     let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
-    let {currentRound, nextRound} = useContext(RoundContext);
-    let {points, dispatch} = useContext(GameContext);
 
     useEffect(() => {
         console.log(prediction);
@@ -16,7 +16,7 @@ function Controls({theCanvas, model, labels}) {
         <div>
             <button
                 onClick={() => {
-                    const canvas = theCanvas.current;
+                    const canvas = ref.current;
                     const ctx = canvas.getContext("2d");
                     ctx.fillRect(0, 0, canvas.height, canvas.width);
                 }}
@@ -25,21 +25,21 @@ function Controls({theCanvas, model, labels}) {
             </button>
             <button
                 onClick={() => {
-                    getPrediction(theCanvas, model).then(prediction => {
+                    getPrediction(ref, model).then(prediction => {
                             setPrediction(labels[prediction[0]]);
                             evaluateRound(labels[prediction[0]], labels[currentRound], dispatch);
                         }
                     );
                     console.log(points);
                     nextRound();
-                    }
+                }
                 }
             >
                 Predict the drawing.
             </button>
         </div>
     );
-}
+});
 
 function evaluateRound(prediction, whatToDraw, dispatch) {
     if (prediction === whatToDraw) {
@@ -47,7 +47,8 @@ function evaluateRound(prediction, whatToDraw, dispatch) {
     }
 }
 
-const Canvas = React.forwardRef((props, ref) => {
+const Canvas = React.forwardRef(() => {
+    const {ref} = useContext(RoundContext);
     let mouseDown = false;
     let lastX;
     let lastY;

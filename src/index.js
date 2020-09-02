@@ -20,10 +20,10 @@ function GamePlay() {
 
     const game = (
         <div>
-            <RoundContext.Provider value={{rounds, currentRound, nextRound, resetRounds}}>
+            <RoundContext.Provider value={{ref, model, labels, rounds, currentRound, nextRound, resetRounds}}>
                 <RoundSummary/>
-                <Canvas ref={ref}/>
-                <Controls theCanvas={ref} model={model} labels={labels}/>
+                <Canvas />
+                <Controls />
                 {rounds[currentRound]}
                 <br/>
                 <Link to="/">
@@ -45,7 +45,7 @@ function GamePlay() {
     );
 
     return (
-        <GameContext.Provider value={{points, labels, currentRound, dispatch }}>
+        <GameContext.Provider value={{currentRound, points, dispatch }}>
             {currentRound > 9 ? result : game}
         </GameContext.Provider>
     )
