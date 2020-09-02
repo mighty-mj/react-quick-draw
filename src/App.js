@@ -4,8 +4,8 @@ import {RoundContext} from "./Round";
 import {GameContext} from "./index";
 
 const Controls = React.forwardRef(() => {
-    const {ref, model, labels, currentRound, nextRound} = useContext(RoundContext);
-    const {points, dispatch} = useContext(GameContext);
+    const {ref, model, labels} = useContext(RoundContext);
+    const {points, dispatch, currentRound, nextRound} = useContext(GameContext);
     let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
 
     useEffect(() => {

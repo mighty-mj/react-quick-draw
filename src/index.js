@@ -20,7 +20,7 @@ function GamePlay() {
 
     const game = (
         <div>
-            <RoundContext.Provider value={{ref, model, labels, rounds, currentRound, nextRound, resetRounds}}>
+            <RoundContext.Provider value={{ref, model, labels}}>
                 <RoundSummary/>
                 <Canvas />
                 <Controls />
@@ -45,7 +45,7 @@ function GamePlay() {
     );
 
     return (
-        <GameContext.Provider value={{currentRound, points, dispatch }}>
+        <GameContext.Provider value={{points, dispatch, rounds, currentRound, nextRound, resetRounds }}>
             {currentRound > 9 ? result : game}
         </GameContext.Provider>
     )
@@ -67,7 +67,7 @@ function StartScreen() {
 }
 
 function RoundSummary() {
-    const {currentRound, rounds} = useContext(RoundContext);
+    const {currentRound, rounds} = useContext(GameContext);
     return (
         <div>
             <h2>Sketch! - Round {currentRound + 1} of {rounds.length}</h2>
