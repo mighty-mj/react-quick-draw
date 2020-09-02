@@ -23,7 +23,7 @@ function GamePlay() {
             <RoundContext.Provider value={{ref, model, labels}}>
                 <RoundSummary/>
                 <Canvas />
-                <Controls />
+                {/*<Controls />*/}
                 {rounds[currentRound]}
                 <br/>
                 <Link to="/">
@@ -45,7 +45,7 @@ function GamePlay() {
     );
 
     return (
-        <GameContext.Provider value={{points, dispatch, rounds, currentRound, nextRound, resetRounds }}>
+        <GameContext.Provider value={{points, dispatch, rounds, currentRound, nextRound, resetRounds, ref, model, labels}}>
             {currentRound > 9 ? result : game}
         </GameContext.Provider>
     )
