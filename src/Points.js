@@ -1,5 +1,3 @@
-import React from "react";
-
 const initialPoints = 0;
 
 function pointReducer(pointsState, action) {
@@ -10,7 +8,7 @@ function pointReducer(pointsState, action) {
             return pointsState + 1;
         case "addTwo":
             return pointsState + 2;
-        case "minusPoint":
+        case "minusOne":
             return pointsState - 1;
         default:
             return pointsState;
