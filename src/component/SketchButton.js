@@ -4,7 +4,7 @@ const SketchButton = ({buttonText, onClickFunction, type=""}) => {
     let buttonClass = "nes-btn"
 
     return (
-      <button type="button" class={buttonClass.concat(" ", type)} onClick={onClickFunction}>
+      <button type="button" className={buttonClass.concat(" ", type)} onClick={onClickFunction}>
           {buttonText}
       </button>
     );

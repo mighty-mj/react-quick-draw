@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from "react";
+import React, {useReducer} from "react";
 import ReactDOM from "react-dom";
 import "nes.css/css/nes.min.css";
 import {Canvas} from "./App";
@@ -8,6 +8,7 @@ import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import {useRounds, RoundContext} from "./Round";
 import {pointReducer} from "./Points";
 import SketchButton from "./component/SketchButton";
+import NesContainer from "./component/NesContainer";
 
 const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
 const labels = require("./labels.json");
@@ -19,34 +20,35 @@ function GamePlay() {
     const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
     const [points, dispatch] = useReducer(pointReducer, 0);
 
+    let gameTitle = "Sketch! - Round " + (currentRound + 1) +  " of " + rounds.length;
     const game = (
-        <div className="nes-container is-dark with-title is-rounded">
+        <NesContainer title={gameTitle}>
             <RoundContext.Provider value={{ref, model, labels}}>
-                <RoundSummary/>
-                <Canvas />
+                <Canvas/>
                 {rounds[currentRound]}
                 <br/>
                 <Link to="/">
                     {<SketchButton buttonText="Home" onClickFunction={() => resetRounds()}/>}
                 </Link>
             </RoundContext.Provider>
-        </div>
+        </NesContainer>
     );
 
     const result = (
-        <div>
+        <NesContainer title="Sketch!">
             <h2>You scored {points} points!</h2>
             <br/>
             Want to challenge your drawing skills again? {<SketchButton buttonText="Try Again!" onClickFunction={() => {
             resetRounds();
             dispatch({type: "reset"});
-            }
+        }
         } type="is-primary"/>}
-        </div>
+        </NesContainer>
     );
 
     return (
-        <GameContext.Provider value={{points, dispatch, rounds, currentRound, nextRound, resetRounds, ref, model, labels}}>
+        <GameContext.Provider
+            value={{points, dispatch, rounds, currentRound, nextRound, resetRounds, ref, model, labels}}>
             {currentRound > 9 ? result : game}
         </GameContext.Provider>
     )
@@ -54,8 +56,7 @@ function GamePlay() {
 
 function StartScreen() {
     return (
-        <div>
-            <h2>Sketch!</h2>
+        <NesContainer title="Sketch!">
             This game has been modeled-off Google's "Quick, Draw!" game, and uses a sampling from the "Quick, Draw!"
             dataset.<br/>
             Brought to you by the EPFL Extension School.
@@ -63,14 +64,7 @@ function StartScreen() {
             <Link to="/game">
                 {<SketchButton buttonText="Game Screen"/>}
             </Link>
-        </div>
-    )
-}
-
-function RoundSummary() {
-    const {currentRound, rounds} = useContext(GameContext);
-    return (
-            <p className="title">Sketch! - Round {currentRound + 1} of {rounds.length}</p>
+        </NesContainer>
     )
 }
 
