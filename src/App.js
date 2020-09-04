@@ -5,7 +5,7 @@ import {GameContext} from "./index";
 import SketchButton from "./component/SketchButton";
 
 const Controls = React.forwardRef(() => {
-    const {startRound, startExtraTime} = useContext(RoundContext);
+    const {startRound, startExtraTime, seconds} = useContext(RoundContext);
     const {ref, model, labels, dispatch, currentRound, nextRound} = useContext(GameContext);
     let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
 
@@ -13,11 +13,11 @@ const Controls = React.forwardRef(() => {
         console.log(prediction);
     });
 
-    function predictAndNextRound() {
+    function predictAndNextRound(pointReducerType="addOne") {
         getPrediction(ref, model).then(prediction => {
                 setPrediction(labels[prediction[0]]);
                 if (labels[prediction[0]] === labels[currentRound]) {
-                    dispatch({type: "addOne"});
+                    dispatch({type: pointReducerType});
                 }
             }
         );
@@ -27,16 +27,19 @@ const Controls = React.forwardRef(() => {
 
     return (
         <div>
+            {seconds > 0 ? <div>
             {<SketchButton buttonText="Clear the canvas." onClickFunction={() => {
                 const canvas = ref.current;
                 const ctx = canvas.getContext("2d");
                 ctx.fillRect(0, 0, canvas.height, canvas.width);
             }} type="is-warning"/>}
-            {<SketchButton buttonText="Predict the drawing." onClickFunction={() => predictAndNextRound()}/>}
-            {<SketchButton buttonText="+10 seconds at cost of 1 Point" onClickFunction={() => {
+            {<SketchButton buttonText="Submit early for an extra Point" onClickFunction={() => predictAndNextRound("addTwo")}/>}
+            {<SketchButton buttonText="+10s at cost of 1 Point" onClickFunction={() => {
                 startExtraTime();
                 dispatch({type: "minusOne"});
             }}/>}
+            </div>
+                : predictAndNextRound()}
         </div>
     );
 });
