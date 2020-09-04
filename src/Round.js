@@ -1,7 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
 import {GameContext} from "./index";
 import {Controls} from "./App";
-import SketchButton from "./component/SketchButton";
 
 const RoundContext = React.createContext({});
 
@@ -30,6 +29,7 @@ function useTimer() {
 
 function Round() {
     const [timer, seconds, startRound, startExtraTime] = useTimer();
+    const {labels, currentRound, points} = useContext(GameContext);
 
     useEffect(() => {
         return () => clearInterval(timer);
@@ -39,37 +39,10 @@ function Round() {
         <div>
             <RoundContext.Provider value={{seconds, startRound, startExtraTime}}>
                 <Controls/>
-                <Question/>
-                <GameState/>
+                <div className="nes-text">You have {seconds} seconds to draw a {labels[currentRound]}!</div>
+                <div className="nes-text">You've scored {points} Points so far.</div>
             </RoundContext.Provider>
         </div>
-    )
-}
-
-function Question() {
-    const {seconds, startExtraTime} = useContext(RoundContext);
-    const {dispatch, currentRound, labels} = useContext(GameContext);
-
-    return (
-        <div>
-            {seconds > 0 ? <span className="nes-text">You have {seconds} seconds to draw a {labels[currentRound]}!</span> :
-                <span className="nes-text">Time's up!
-                    {<SketchButton buttonText="More Time?" onClickFunction={() => {
-                    startExtraTime();
-                    dispatch({type: "minusOne"});
-                }}/>}
-                </span>}
-        </div>
-    )
-}
-
-function GameState() {
-    let {points} = useContext(GameContext);
-
-    return (
-        <span className="nes-text">
-            You've scored {points} so far.
-        </span>
     )
 }
 
