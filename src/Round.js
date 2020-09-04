@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react";
 import {GameContext} from "./index";
 import {Controls} from "./App";
+import SketchButton from "./component/SketchButton";
 
 const RoundContext = React.createContext({});
 
@@ -51,11 +52,13 @@ function Question() {
 
     return (
         <div>
-            {seconds > 0 ? <div>You have {seconds} seconds to draw a {labels[currentRound]}!</div> :
-                <div>Time's up! <button onClick={() => {
+            {seconds > 0 ? <span class="nes-text">You have {seconds} seconds to draw a {labels[currentRound]}!</span> :
+                <span className="nes-text">Time's up!
+                    {<SketchButton buttonText="More Time?" onClickFunction={() => {
                     startExtraTime();
-                    dispatch({type: "minusOne"})
-                }}>More Time?</button></div>}
+                    dispatch({type: "minusOne"});
+                }}/>}
+                </span>}
         </div>
     )
 }

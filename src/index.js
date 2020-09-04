@@ -1,12 +1,13 @@
 import React, {useContext, useReducer} from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import {Canvas, Controls} from "./App";
+import "nes.css/css/nes.min.css";
+import {Canvas} from "./App";
 import * as serviceWorker from "./serviceWorker";
 import * as tf from "@tensorflow/tfjs";
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import {useRounds, RoundContext} from "./Round";
 import {pointReducer} from "./Points";
+import SketchButton from "./component/SketchButton";
 
 const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
 const labels = require("./labels.json");
@@ -19,15 +20,14 @@ function GamePlay() {
     const [points, dispatch] = useReducer(pointReducer, 0);
 
     const game = (
-        <div>
+        <div className="nes-container is-dark with-title is-rounded">
             <RoundContext.Provider value={{ref, model, labels}}>
                 <RoundSummary/>
                 <Canvas />
-                {/*<Controls />*/}
                 {rounds[currentRound]}
                 <br/>
                 <Link to="/">
-                    <button onClick={() => resetRounds()}>Home</button>
+                    {<SketchButton buttonText="Home" onClickFunction={() => resetRounds()}/>}
                 </Link>
             </RoundContext.Provider>
         </div>
@@ -37,10 +37,11 @@ function GamePlay() {
         <div>
             <h2>You scored {points} points!</h2>
             <br/>
-            Want to challenge your drawing skills again? <button onClick={() => {
+            Want to challenge your drawing skills again? {<SketchButton buttonText="Try Again!" onClickFunction={() => {
             resetRounds();
             dispatch({type: "reset"});
-        }}>Try Again!</button>
+            }
+        } type="is-primary"/>}
         </div>
     );
 
@@ -60,7 +61,7 @@ function StartScreen() {
             Brought to you by the EPFL Extension School.
             <br/>
             <Link to="/game">
-                <button>Game Screen</button>
+                {<SketchButton buttonText="Game Screen"/>}
             </Link>
         </div>
     )
@@ -69,9 +70,7 @@ function StartScreen() {
 function RoundSummary() {
     const {currentRound, rounds} = useContext(GameContext);
     return (
-        <div>
-            <h2>Sketch! - Round {currentRound + 1} of {rounds.length}</h2>
-        </div>
+            <p className="title">Sketch! - Round {currentRound + 1} of {rounds.length}</p>
     )
 }
 

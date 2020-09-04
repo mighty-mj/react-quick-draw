@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {getPrediction} from "./helpers.js";
 import {RoundContext} from "./Round";
 import {GameContext} from "./index";
+import SketchButton from "./component/SketchButton";
 
 const Controls = React.forwardRef(() => {
     const {startRound} = useContext(RoundContext);
@@ -14,30 +15,21 @@ const Controls = React.forwardRef(() => {
 
     return (
         <div>
-            <button
-                onClick={() => {
-                    const canvas = ref.current;
-                    const ctx = canvas.getContext("2d");
-                    ctx.fillRect(0, 0, canvas.height, canvas.width);
-                }}
-            >
-                Clear the canvas.
-            </button>
-            <button
-                onClick={() => {
-                    getPrediction(ref, model).then(prediction => {
-                            setPrediction(labels[prediction[0]]);
-                            evaluateRound(labels[prediction[0]], labels[currentRound], dispatch);
-                        }
-                    );
-                    console.log(points);
-                    nextRound();
-                    startRound();
-                }
-                }
-            >
-                Predict the drawing.
-            </button>
+            {<SketchButton buttonText="Clear the canvas." onClickFunction={() => {
+                const canvas = ref.current;
+                const ctx = canvas.getContext("2d");
+                ctx.fillRect(0, 0, canvas.height, canvas.width);
+            }} type="is-warning"/>}
+            {<SketchButton buttonText="Predict the drawing." onClickFunction={() => {
+                getPrediction(ref, model).then(prediction => {
+                        setPrediction(labels[prediction[0]]);
+                        evaluateRound(labels[prediction[0]], labels[currentRound], dispatch);
+                    }
+                );
+                console.log(points);
+                nextRound();
+                startRound();
+            }}/> }
         </div>
     );
 });
