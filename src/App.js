@@ -5,13 +5,25 @@ import {GameContext} from "./index";
 import SketchButton from "./component/SketchButton";
 
 const Controls = React.forwardRef(() => {
-    const {startRound} = useContext(RoundContext);
-    const {ref, model, labels, points, dispatch, currentRound, nextRound} = useContext(GameContext);
+    const {startRound, startExtraTime} = useContext(RoundContext);
+    const {ref, model, labels, dispatch, currentRound, nextRound} = useContext(GameContext);
     let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
 
     useEffect(() => {
         console.log(prediction);
     });
+
+    function predictAndNextRound() {
+        getPrediction(ref, model).then(prediction => {
+                setPrediction(labels[prediction[0]]);
+                if (labels[prediction[0]] === labels[currentRound]) {
+                    dispatch({type: "addOne"});
+                }
+            }
+        );
+        nextRound();
+        startRound();
+    }
 
     return (
         <div>
@@ -20,25 +32,14 @@ const Controls = React.forwardRef(() => {
                 const ctx = canvas.getContext("2d");
                 ctx.fillRect(0, 0, canvas.height, canvas.width);
             }} type="is-warning"/>}
-            {<SketchButton buttonText="Predict the drawing." onClickFunction={() => {
-                getPrediction(ref, model).then(prediction => {
-                        setPrediction(labels[prediction[0]]);
-                        evaluateRound(labels[prediction[0]], labels[currentRound], dispatch);
-                    }
-                );
-                console.log(points);
-                nextRound();
-                startRound();
-            }}/> }
+            {<SketchButton buttonText="Predict the drawing." onClickFunction={() => predictAndNextRound()}/>}
+            {<SketchButton buttonText="+10 seconds at cost of 1 Point" onClickFunction={() => {
+                startExtraTime();
+                dispatch({type: "minusOne"});
+            }}/>}
         </div>
     );
 });
-
-function evaluateRound(prediction, whatToDraw, dispatch) {
-    if (prediction === whatToDraw) {
-        dispatch({type: "addOne"});
-    }
-}
 
 const Canvas = React.forwardRef(() => {
     const {ref} = useContext(RoundContext);
