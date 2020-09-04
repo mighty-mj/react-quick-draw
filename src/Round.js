@@ -25,7 +25,7 @@ function useTimer() {
         }
     }, 1000);
 
-    return [interval, seconds, () => setSeconds(20), () => setSeconds(10)];
+    return [interval, seconds, () => setSeconds(20), () => setSeconds(seconds + 10)];
 }
 
 function Round() {
@@ -52,7 +52,7 @@ function Question() {
 
     return (
         <div>
-            {seconds > 0 ? <span class="nes-text">You have {seconds} seconds to draw a {labels[currentRound]}!</span> :
+            {seconds > 0 ? <span className="nes-text">You have {seconds} seconds to draw a {labels[currentRound]}!</span> :
                 <span className="nes-text">Time's up!
                     {<SketchButton buttonText="More Time?" onClickFunction={() => {
                     startExtraTime();
@@ -64,12 +64,12 @@ function Question() {
 }
 
 function GameState() {
-    let {currentRound, points} = useContext(GameContext);
+    let {points} = useContext(GameContext);
 
     return (
-        <div>
-            You've scored {points} out of {currentRound}.
-        </div>
+        <span className="nes-text">
+            You've scored {points} so far.
+        </span>
     )
 }
 
