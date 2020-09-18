@@ -32,12 +32,12 @@ const Controls = React.forwardRef(() => {
                 const canvas = ref.current;
                 const ctx = canvas.getContext("2d");
                 ctx.fillRect(0, 0, canvas.height, canvas.width);
-            }} type="is-warning"/>}
-            {<SketchButton buttonText="Submit early for an extra Point" onClickFunction={() => predictAndNextRound("addTwo")}/>}
+            }}  buttonId="clearCanvas" type="is-warning"/>}
+            {<SketchButton buttonText="Submit early for an extra Point" onClickFunction={() => predictAndNextRound("addTwo")} buttonId="predictEarly"/>}
             {<SketchButton buttonText="+10s at cost of 1 Point" onClickFunction={() => {
                 startExtraTime();
                 dispatch({type: "minusOne"});
-            }}/>}
+            }} buttonId="extraTime"/>}
             </div>
                 : predictAndNextRound()}
         </div>

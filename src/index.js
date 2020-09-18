@@ -28,7 +28,7 @@ function GamePlay() {
                 {rounds[currentRound]}
                 <br/>
                 <Link to="/">
-                    {<SketchButton buttonText="Home" onClickFunction={() => resetRounds()}/>}
+                    {<SketchButton buttonText="Home" onClickFunction={() => resetRounds()} buttonId="home"/>}
                 </Link>
             </RoundContext.Provider>
         </NesContainer>
@@ -62,7 +62,7 @@ function StartScreen() {
             Brought to you by the EPFL Extension School.
             <br/>
             <Link to="/game">
-                {<SketchButton buttonText="Game Screen"/>}
+                {<SketchButton buttonText="Game Screen"  buttonId="gameScreen"/>}
             </Link>
         </NesContainer>
     )
