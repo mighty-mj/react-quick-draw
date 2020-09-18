@@ -1,9 +1,13 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import {Canvas} from './component/Canvas';
+import renderer from "react-test-renderer";
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+describe("Test the <Canvas /> component", () => {
+
+  it("Canvas renders correctly", () => {
+    const tree = renderer.create(<Canvas/>).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
 });
+

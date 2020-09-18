@@ -16,6 +16,10 @@
     "react-scripts": "3.4.1",
     "nes.css": "^2.3.0"
   },
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
