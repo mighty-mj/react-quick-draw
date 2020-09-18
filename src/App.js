@@ -1,104 +1,83 @@
-import React, {useContext, useEffect, useState} from "react";
-import {getPrediction} from "./helpers.js";
-import {RoundContext} from "./Round";
-import {GameContext} from "./index";
+import * as tf from "@tensorflow/tfjs";
+import React, {useReducer} from "react";
+import {RoundContext, useRounds} from "./Round";
+import {pointReducer} from "./Points";
+import NesContainer from "./component/NesContainer";
+import {Canvas} from "./component/Canvas";
+import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import SketchButton from "./component/SketchButton";
 
-const Controls = React.forwardRef(() => {
-    const {startRound, startExtraTime, seconds} = useContext(RoundContext);
-    const {ref, model, labels, dispatch, currentRound, nextRound} = useContext(GameContext);
-    let [prediction, setPrediction] = useState(""); // Sets default label to empty string.
+const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
+const labels = require("./labels.json");
+let ref = React.createRef();
 
-    useEffect(() => {
-        console.log(prediction);
-    });
+export const GameContext = React.createContext({});
 
-    function predictAndNextRound(pointReducerType="addOne") {
-        getPrediction(ref, model).then(prediction => {
-                setPrediction(labels[prediction[0]]);
-                if (labels[prediction[0]] === labels[currentRound]) {
-                    dispatch({type: pointReducerType});
-                }
-            }
-        );
-        nextRound();
-        startRound();
-    }
+function GamePlay() {
+    const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
+    const [points, dispatch] = useReducer(pointReducer, 0);
 
-    return (
-        <div>
-            {seconds > 0 ? <div>
-            {<SketchButton buttonText="Clear the canvas." onClickFunction={() => {
-                const canvas = ref.current;
-                const ctx = canvas.getContext("2d");
-                ctx.fillRect(0, 0, canvas.height, canvas.width);
-            }}  buttonId="clearCanvas" type="is-warning"/>}
-            {<SketchButton buttonText="Submit early for an extra Point" onClickFunction={() => predictAndNextRound("addTwo")} buttonId="predictEarly"/>}
-            {<SketchButton buttonText="+10s at cost of 1 Point" onClickFunction={() => {
-                startExtraTime();
-                dispatch({type: "minusOne"});
-            }} buttonId="extraTime"/>}
-            </div>
-                : predictAndNextRound()}
-        </div>
+    let gameTitle = "Sketch! - Round " + (currentRound + 1) +  " of " + rounds.length;
+    const game = (
+        <NesContainer title={gameTitle}>
+            <RoundContext.Provider value={{ref, model, labels}}>
+                <Canvas/>
+                {rounds[currentRound]}
+                <br/>
+                <Link to="/">
+                    {<SketchButton buttonText="Home" onClickFunction={() => resetRounds()} buttonId="home"/>}
+                </Link>
+            </RoundContext.Provider>
+        </NesContainer>
     );
-});
 
-const Canvas = React.forwardRef(() => {
-    const {ref} = useContext(RoundContext);
-    let mouseDown = false;
-    let lastX;
-    let lastY;
-
-    function drawLine(canvas, x, y, lastX, lastY) {
-        let context = canvas.getContext("2d");
-
-        context.strokeStyle = "#000000";
-        context.lineWidth = 12;
-        context.lineJoin = "round";
-
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(x, y);
-        context.closePath();
-        context.stroke();
-
-        return [x, y];
-    }
-
-    const handleMouseup = () => {
-        mouseDown = false;
-        [lastX, lastY] = [undefined, undefined];
-    };
-
-    const handleMousemove = e => {
-        const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        if (mouseDown) {
-            [lastX, lastY] = drawLine(e.target, x, y, lastX, lastY);
+    const result = (
+        <NesContainer title="Sketch!">
+            <h2>You scored {points} points!</h2>
+            <br/>
+            Want to challenge your drawing skills again? {<SketchButton buttonText="Try Again!" onClickFunction={() => {
+            resetRounds();
+            dispatch({type: "reset"});
         }
-    };
-
-    useEffect(() => {
-        const canvas = ref.current;
-        const context = canvas.getContext("2d");
-
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.height, canvas.width);
-    });
+        } type="is-primary"/>}
+        </NesContainer>
+    );
 
     return (
-        <canvas
-            height={300}
-            width={300}
-            ref={ref}
-            onMouseDown={() => (mouseDown = true)}
-            onMouseUp={handleMouseup}
-            onMouseMove={e => handleMousemove(e)}
-        />
-    );
-});
+        <GameContext.Provider
+            value={{points, dispatch, rounds, currentRound, nextRound, resetRounds, ref, model, labels}}>
+            {currentRound > 9 ? result : game}
+        </GameContext.Provider>
+    )
+}
 
-export {Canvas, Controls};
+function StartScreen() {
+    return (
+        <NesContainer title="Sketch!">
+            This game has been modeled-off Google's "Quick, Draw!" game, and uses a sampling from the "Quick, Draw!"
+            dataset.<br/>
+            Brought to you by the EPFL Extension School.
+            <br/>
+            <Link to="/game">
+                {<SketchButton buttonText="Game Screen"  buttonId="gameScreen"/>}
+            </Link>
+        </NesContainer>
+    )
+}
+
+function GameRouting() {
+    return (
+        <Router>
+            <Switch>
+                <Route path="/game">
+                    <GamePlay/>
+                </Route>
+                <Route path="/">
+                    <StartScreen/>
+                </Route>
+            </Switch>
+        </Router>
+    )
+}
+
+export default GameRouting;

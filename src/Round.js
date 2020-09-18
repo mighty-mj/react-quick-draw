@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
-import {GameContext} from "./index";
-import {Controls} from "./App";
+import {GameContext} from "./App";
+import {Controls} from "./component/Controls";
 
 const RoundContext = React.createContext({});
 
