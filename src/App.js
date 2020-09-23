@@ -6,6 +6,7 @@ import NesContainer from "./component/NesContainer";
 import {Canvas} from "./component/Canvas";
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import SketchButton from "./component/SketchButton";
+import TypedText from "./component/TypedText";
 
 const model = tf.loadLayersModel(process.env.PUBLIC_URL + "/model/model.json");
 const labels = require("./labels.json");
@@ -33,9 +34,11 @@ function GamePlay() {
 
     const result = (
         <NesContainer title="Sketch!">
+
             <h2>You scored {points} points!</h2>
             <br/>
-            Want to challenge your drawing skills again? {<SketchButton buttonText="Try Again!" onClickFunction={() => {
+            <TypedText strings={["Want to challenge your drawing skills again?", "Lets try again!"]}/>
+            {<SketchButton buttonText="Try Again!" onClickFunction={() => {
             resetRounds();
             dispatch({type: "reset"});
         }
@@ -54,12 +57,12 @@ function GamePlay() {
 function StartScreen() {
     return (
         <NesContainer title="Sketch!">
-            This game has been modeled-off Google's "Quick, Draw!" game, and uses a sampling from the "Quick, Draw!"
-            dataset.<br/>
-            Brought to you by the EPFL Extension School.
+            <TypedText strings={["This game has been modeled-off Google's \"Quick, Draw!\" game, and uses a sampling from the \"Quick, Draw!\"\n" +
+            "dataset.<br/>" +
+            "Brought to you by the EPFL Extension School."]}/>
             <br/>
             <Link to="/game">
-                {<SketchButton buttonText="Game Screen"  buttonId="gameScreen"/>}
+                {<SketchButton buttonText="Lets start!"  buttonId="gameScreen"/>}
             </Link>
         </NesContainer>
     )
