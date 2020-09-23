@@ -2,7 +2,6 @@ import React, {useReducer} from 'react';
 import {pointReducer} from "./Points";
 import {mount} from "enzyme";
 
-
 function TestPointReducerComponent() {
     const [points, dispatch] = useReducer(pointReducer, 0);
 
@@ -38,9 +37,8 @@ describe("Test the Point handling with the reducer component", () => {
         expect(wrapper.find({id: "points"}).text(2));
     });
 
-    it("areset points", () => {
+    it("reset points", () => {
         wrapper.find({id: "reset"}).simulate("click");
         expect(wrapper.find({id: "points"}).text(0));
     });
-
 });

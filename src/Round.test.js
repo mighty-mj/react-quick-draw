@@ -30,7 +30,5 @@ describe("<Round />", () => {
         expect(wrapper.contains({id: "clearCanvas"})).toEqual(true);
         expect(wrapper.contains({id: "predictEarly"})).toEqual(true);
         expect(wrapper.contains({id: "extraTime"})).toEqual(true);
-        // wrapper.find({id: "predictEarly"}).simulate("click");
-        // expect(nextRound).toHaveBeenCalled();
     });
 });
