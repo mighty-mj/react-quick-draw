@@ -70,14 +70,10 @@ function StartScreen() {
 
 function GameRouting() {
     return (
-        <Router>
+        <Router basename={'/react-quick-draw/'}>
             <Switch>
-                <Route path="/game">
-                    <GamePlay/>
-                </Route>
-                <Route path="/">
-                    <StartScreen/>
-                </Route>
+                <Route path="/game" component={GamePlay} />
+                <Route path="/" component={StartScreen}/>
             </Switch>
         </Router>
     )
