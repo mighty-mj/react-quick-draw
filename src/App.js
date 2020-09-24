@@ -18,7 +18,7 @@ function GamePlay() {
     const [rounds, currentRound, nextRound, resetRounds] = useRounds(labels);
     const [points, dispatch] = useReducer(pointReducer, 0);
 
-    let gameTitle = "Sketch! - Round " + (currentRound + 1) +  " of " + rounds.length;
+    let gameTitle = "Sketch! - Round " + (currentRound + 1) + " of " + rounds.length;
     const game = (
         <NesContainer title={gameTitle}>
             <RoundContext.Provider value={{ref, model, labels}}>
@@ -39,10 +39,10 @@ function GamePlay() {
             <br/>
             <TypedText strings={["Want to challenge your drawing skills again?", "Lets try again!"]}/>
             {<SketchButton buttonText="Try Again!" onClickFunction={() => {
-            resetRounds();
-            dispatch({type: "reset"});
-        }
-        } type="is-primary"/>}
+                resetRounds();
+                dispatch({type: "reset"});
+            }
+            } type="is-primary"/>}
         </NesContainer>
     );
 
@@ -57,12 +57,12 @@ function GamePlay() {
 function StartScreen() {
     return (
         <NesContainer title="Sketch!">
-            <TypedText strings={["This game has been modeled-off Google's \"Quick, Draw!\" game, and uses a sampling from the \"Quick, Draw!\"\n" +
-            "dataset.<br/>" +
-            "Brought to you by the EPFL Extension School."]}/>
+            <TypedText
+                strings={["This game has been modeled-off Google's \"Quick, Draw!\" game, and uses a sampling from the \"Quick, Draw!\" dataset.<br/>" +
+                "Brought to you by the EPFL Extension School."]}/>
             <br/>
             <Link to="/game">
-                {<SketchButton buttonText="Lets start!"  buttonId="gameScreen"/>}
+                {<SketchButton buttonText="Lets start!" buttonId="gameScreen"/>}
             </Link>
         </NesContainer>
     )
