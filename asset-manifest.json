@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/react-quick-draw/static/js/main.f60f7310.chunk.js",
-    "main.js.map": "/react-quick-draw/static/js/main.f60f7310.chunk.js.map",
+    "main.js": "/react-quick-draw/static/js/main.6e6b6f6f.chunk.js",
+    "main.js.map": "/react-quick-draw/static/js/main.6e6b6f6f.chunk.js.map",
     "runtime-main.js": "/react-quick-draw/static/js/runtime-main.014e8426.js",
     "runtime-main.js.map": "/react-quick-draw/static/js/runtime-main.014e8426.js.map",
     "static/css/2.87d4210f.chunk.css": "/react-quick-draw/static/css/2.87d4210f.chunk.css",
     "static/js/2.32891c96.chunk.js": "/react-quick-draw/static/js/2.32891c96.chunk.js",
     "static/js/2.32891c96.chunk.js.map": "/react-quick-draw/static/js/2.32891c96.chunk.js.map",
     "index.html": "/react-quick-draw/index.html",
-    "precache-manifest.1f66095f6e98f1c9e94c6db3da4153ba.js": "/react-quick-draw/precache-manifest.1f66095f6e98f1c9e94c6db3da4153ba.js",
+    "precache-manifest.9832643b0d4c3071063dadc3ce666985.js": "/react-quick-draw/precache-manifest.9832643b0d4c3071063dadc3ce666985.js",
     "service-worker.js": "/react-quick-draw/service-worker.js",
     "static/css/2.87d4210f.chunk.css.map": "/react-quick-draw/static/css/2.87d4210f.chunk.css.map",
     "static/js/2.32891c96.chunk.js.LICENSE.txt": "/react-quick-draw/static/js/2.32891c96.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.014e8426.js",
     "static/css/2.87d4210f.chunk.css",
     "static/js/2.32891c96.chunk.js",
-    "static/js/main.f60f7310.chunk.js"
+    "static/js/main.6e6b6f6f.chunk.js"
   ]
 }
