@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "519b27a94f061f577676e597a6e08625",
+    "revision": "837b8730cde8796bff6578ec65da7ab6",
     "url": "/react-quick-draw/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-quick-draw/static/js/2.32891c96.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c08072634687f03974ef",
-    "url": "/react-quick-draw/static/js/main.6e6b6f6f.chunk.js"
+    "revision": "eeee2274601b404fd618",
+    "url": "/react-quick-draw/static/js/main.7be2c2e9.chunk.js"
   },
   {
     "revision": "44e4f7c70d2b89d52ace",
