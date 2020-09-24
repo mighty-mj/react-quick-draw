@@ -2,7 +2,7 @@
   "name": "react-quick-draw",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://epfl-extension-school.github.io/project-react-c1-s8-4007-2250/",
+  "homepage": "https://mighty-mj.github.io/react-quick-draw/",
   "dependencies": {
     "@tensorflow/tfjs": "^2.3.0",
     "@testing-library/jest-dom": "^4.2.4",
